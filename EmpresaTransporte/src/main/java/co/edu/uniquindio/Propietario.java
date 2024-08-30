@@ -13,24 +13,19 @@ public class Propietario {
     private Vehiculo vehiculo;
     private Collection<Vehiculo> vehiculos;
 
-    public Propietario(String nombre,int edad, String cedula, String email, String celular,Vehiculo vehiculo) {
+    public Propietario(String nombre, int edad, String cedula, String email, String celular, Vehiculo vehiculo, Collection<Vehiculo> vehiculos) {
         this.nombre = nombre;
         this.edad = edad;
         this.cedula = cedula;
         this.email = email;
         this.celular = celular;
         this.vehiculo = vehiculo;
-    }
-    public Propietario(String nombre,int edad, String cedula, String email, String celular) {
-        this.nombre = nombre;
-        this.edad = edad;
-        this.cedula = cedula;
-        this.email = email;
-        this.celular = celular;
-        vehiculos = new LinkedList<Vehiculo>();
+        this.vehiculos = vehiculos;
     }
 
-    public Propietario() {}
+    public static PropietarioBuilder Builder(){
+        return new PropietarioBuilder();
+    }
 
     public String getNombre() {
         return nombre;

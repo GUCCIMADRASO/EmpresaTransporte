@@ -6,20 +6,16 @@ public class Usuario {
     private Vehiculo vehiculo;
     private double peso;
 
-    public Usuario(String nombre, String edad, double peso , Vehiculo vehiculo) {
+    public Usuario(String nombre, String edad, double peso, Vehiculo vehiculo) {
         this.nombre = nombre;
         this.edad = edad;
         this.peso = peso;
         this.vehiculo = vehiculo;
     }
 
-    public Usuario(String nombre, String edad, double peso) {
-        this.nombre = nombre;
-        this.edad = edad;
-        this.peso = peso;
+    public static UsuarioBuilder Builder(){
+        return new UsuarioBuilder();
     }
-
-    public Usuario () {}
 
     public String getNombre() {
         return nombre;

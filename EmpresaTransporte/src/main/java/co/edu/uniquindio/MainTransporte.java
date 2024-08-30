@@ -8,8 +8,10 @@ public class MainTransporte {
 
     public static void main(String[] args) {
         LinkedList<VehiculoTransporte> vehiculoTransportes = new LinkedList<>();
+        LinkedList<VehiculoCarga> vehiculoCargas = new LinkedList<>();
         LinkedList<Propietario> propietarios = new LinkedList<>();
         LinkedList<Usuario> usuarios = new LinkedList<>();
+        crearDatosDePrueba(vehiculoTransportes,vehiculoCargas,propietarios,usuarios);
         Scanner sn = new Scanner(System.in);
         boolean salir = false;
         int opcion;
@@ -22,16 +24,16 @@ public class MainTransporte {
 
                 switch (opcion) {
                     case 1:
-                        crearPropietarioYVehiculoCarga(propietarios);
+                        mostrarDatosDePrueba(vehiculoTransportes,vehiculoCargas,propietarios,usuarios);
                         break;
                     case 2:
                         crearVehiculosTransporte(vehiculoTransportes,usuarios);
                         break;
                     case 3:
-                        calcularPasajerosTransportados(vehiculoTransportes);
+                        calcularPasajerosTransportados(vehiculoTransportes,usuarios);
                         break;
                     case 4:
-                        mostrarDatosDePrueba();
+                        crearPropietarioYVehiculoCarga(propietarios);
                         break;
                     case 5:
                         usuariosConSobrepeso(vehiculoTransportes);
@@ -56,10 +58,10 @@ public class MainTransporte {
     }
 
     private static void mostrarMenu() {
-        System.out.println("1. Crear un propietario y su vehiculo de carga");
+        System.out.println("1. Mostrar datos de prueba para la clase Empresa de Transporte");
         System.out.println("2. Crear vehiculos de transporte");
         System.out.println("3. Calcular el total de pasajeros transportados en un dia");
-        System.out.println("4. Mostrar datos de prueba para la clase Empresa de Transporte");
+        System.out.println("4. Crear un propietario y su vehiculo de carga");
         System.out.println("5. Buscar usuarios con sobrepeso");
         System.out.println("6. Contar propietarios mayores a 40 años");
         System.out.println("7. Contar usuarios en rango de edad");
@@ -70,7 +72,7 @@ public class MainTransporte {
     private static void crearPropietarioYVehiculoCarga(LinkedList<Propietario> propietarios) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Has seleccionado la opción 1 (Crear un propietario y su vehículo de carga)");
+        System.out.println("Has seleccionado la opción 4 (Crear un propietario y su vehículo de carga)");
         VehiculoCarga vehiculoCarga = new VehiculoCarga(
                 obtenerDato(scanner, "Ingrese la placa del vehículo: "),
                 obtenerDato(scanner, "Ingrese el modelo del vehículo: "),
@@ -80,14 +82,15 @@ public class MainTransporte {
                 Integer.parseInt(obtenerDato(scanner, "Ingrese el número de ejes del vehículo de carga: "))
         );
 
-        Propietario propietario = new Propietario(
-                obtenerDato(scanner, "Ingrese el nombre del propietario: "),
-                Integer.parseInt(obtenerDato(scanner, "Ingrese la edad del propietario: ")),
-                obtenerDato(scanner, "Ingrese la cédula del propietario: "),
-                obtenerDato(scanner, "Ingrese el email del propietario: "),
-                obtenerDato(scanner, "Ingrese el celular del propietario: "),
-                vehiculoCarga
-        );
+        Propietario propietario = Propietario.Builder()
+                .nombre(obtenerDato(scanner, "Ingrese el nombre del propietario: "))
+                .edad(Integer.parseInt(obtenerDato(scanner, "Ingrese la edad del propietario: ")))
+                .cedula(obtenerDato(scanner, "Ingrese la cédula del propietario: "))
+                .email(obtenerDato(scanner, "Ingrese el email del propietario: "))
+                .celular(obtenerDato(scanner, "Ingrese el celular del propietario: "))
+                .vehiculo(vehiculoCarga)  // Suponiendo que `vehiculoCarga` es un objeto Vehiculo
+                .build();
+
         propietarios.add(propietario);
 
         System.out.println("Se creó con éxito el propietario con los datos: " + propietario);
@@ -96,7 +99,6 @@ public class MainTransporte {
 
     private static void crearVehiculosTransporte(LinkedList<VehiculoTransporte> vehiculoTransportes,LinkedList<Usuario> usuarios) {
         Scanner scanner = new Scanner(System.in);
-        generarDatosListasUsuarios(usuarios);
         System.out.println("Has seleccionado la opción 2 (Crear vehículos de transporte)");
         int numeroVehiculosTransportes = Integer.parseInt(obtenerDato(scanner,"Ingrese el numero de vehículos de transporte que desea crear: "));
 
@@ -108,20 +110,30 @@ public class MainTransporte {
                     obtenerDato(scanner, "Ingrese el color del vehículo: "),
                     Integer.parseInt(obtenerDato(scanner, "Ingrese el máximo de usuarios del vehículo: "))
             );
-
-            for (int j = 0; j < usuarios.size() && j < vehiculoTransporte.getMaxPasajeros(); j++) {
-                vehiculoTransporte.getUsuarios()[j] = usuarios.get(j);
-            }
-
             vehiculoTransportes.add(vehiculoTransporte);
         }
     }
 
-    private static void calcularPasajerosTransportados(LinkedList<VehiculoTransporte> vehiculoTransportes) {
+    private static void saturar(LinkedList<VehiculoTransporte> vehiculoTransportes, LinkedList<Usuario> usuarios) {
+        for (VehiculoTransporte vehiculoTransporte : vehiculoTransportes) {
+            int maxPasajeros = vehiculoTransporte.getMaxPasajeros();
+            Usuario[] usuariosVehiculo = vehiculoTransporte.getUsuarios();
+
+            if (usuariosVehiculo != null) {
+                for (int j = 0; j < usuarios.size() && j < maxPasajeros; j++) {
+                    usuariosVehiculo[j] = usuarios.get(j);
+                }
+            }
+        }
+    }
+
+    private static void calcularPasajerosTransportados(LinkedList<VehiculoTransporte> vehiculoTransportes,LinkedList<Usuario> usuarios) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Has seleccionado la opción 3 (Calcular el total de pasajeros transportados en un día)");
         String placa = obtenerDato(scanner, "Ingrese la placa del vehículo a consultar: ");
+        saturar(vehiculoTransportes,usuarios);
+
 
         for (VehiculoTransporte vehiculoTransporte : vehiculoTransportes) {
             if (vehiculoTransporte.getPlaca().equalsIgnoreCase(placa)) {
@@ -152,7 +164,6 @@ public class MainTransporte {
 
     }
     private static void contarPropietariosMayoresDe40(LinkedList<Propietario> propietarios) {
-        generarDatosListasPropietarios(propietarios);
         System.out.println("Has seleccionado la opción 6 (Contar propietarios mayores a 40 años)");
         int contador = 0;
 
@@ -187,84 +198,57 @@ public class MainTransporte {
         System.out.print(mensaje);
         return scanner.next();
     }
-    public static void generarDatosListasUsuarios(LinkedList<Usuario> usuarios) {
-        usuarios.add(new Usuario("Carl", "21",70));
-        usuarios.add(new Usuario("Camilo", "20",75));
-        usuarios.add(new Usuario("Cesar", "27",80));
-        usuarios.add(new Usuario("Daniel", "18",75));
-    }
-    public static void generarDatosListasPropietarios(LinkedList<Propietario> propietarios) {
-        propietarios.add(new Propietario("Juan Perez",50, "123456789", "juan@example.com", "3001234567"));
-        propietarios.add(new Propietario("Maria Gomez",35, "987654321", "maria@example.com", "3009876543"));
-        propietarios.add(new Propietario("Carlos Ruiz",22, "112233445", "carlos@example.com", "3001122334"));
-        propietarios.add(new Propietario("Ana Martinez",45, "556677889", "ana@example.com", "3005566778"));
-    }
     //Datos de prueba
-    public static EmpresaTransporte crearDatosDePrueba() {
-        EmpresaTransporte empresaTransporte = new EmpresaTransporte();
-
+    public static void crearDatosDePrueba(LinkedList<VehiculoTransporte> vehiculoTransportes,LinkedList<VehiculoCarga> vehiculoCargas,LinkedList<Propietario> propietarios,LinkedList<Usuario> usuarios) {
         // Crear vehículos de carga
         VehiculoCarga vehiculoCarga1 = new VehiculoCarga("ABC123", "F-150", "Ford", "Rojo", 1500.5, 2);
         VehiculoCarga vehiculoCarga2 = new VehiculoCarga("DEF456", "Ram 2500", "Dodge", "Negro", 2000.0, 4);
         VehiculoCarga vehiculoCarga3 = new VehiculoCarga("GHI789", "Tundra", "Toyota", "Blanco", 1800.7, 3);
         VehiculoCarga vehiculoCarga4 = new VehiculoCarga("JKL012", "Silverado", "Chevrolet", "Azul", 2200.2, 4);
 
-        empresaTransporte.getVehiculosCarga().add(vehiculoCarga1);
-        empresaTransporte.getVehiculosCarga().add(vehiculoCarga2);
-        empresaTransporte.getVehiculosCarga().add(vehiculoCarga3);
-        empresaTransporte.getVehiculosCarga().add(vehiculoCarga4);
+        vehiculoCargas.add(vehiculoCarga1);
+        vehiculoCargas.add(vehiculoCarga2);
+        vehiculoCargas.add(vehiculoCarga3);
+        vehiculoCargas.add(vehiculoCarga4);
 
         // Crear vehículos de transporte
-        VehiculoTransporte vehiculoTransporte1 = new VehiculoTransporte("MNO345", "Sprinter", "Mercedes-Benz", "Plata", 15);
-        VehiculoTransporte vehiculoTransporte2 = new VehiculoTransporte("PQR678", "Hiace", "Toyota", "Blanco", 12);
-        VehiculoTransporte vehiculoTransporte3 = new VehiculoTransporte("STU901", "Transit", "Ford", "Negro", 10);
-        VehiculoTransporte vehiculoTransporte4 = new VehiculoTransporte("VWX234", "Ducato", "Fiat", "Gris", 14);
+        VehiculoTransporte vehiculoTransporte1 = new VehiculoTransporte("MNO345", "Sprinter", "Mercedes-Benz", "Plata", 4);
+        VehiculoTransporte vehiculoTransporte2 = new VehiculoTransporte("PQR678", "Hiace", "Toyota", "Blanco", 3);
+        VehiculoTransporte vehiculoTransporte3 = new VehiculoTransporte("STU901", "Transit", "Ford", "Negro", 4);
+        VehiculoTransporte vehiculoTransporte4 = new VehiculoTransporte("VWX234", "Ducato", "Fiat", "Gris", 2);
 
-        empresaTransporte.getVehiculosTransporte().add(vehiculoTransporte1);
-        empresaTransporte.getVehiculosTransporte().add(vehiculoTransporte2);
-        empresaTransporte.getVehiculosTransporte().add(vehiculoTransporte3);
-        empresaTransporte.getVehiculosTransporte().add(vehiculoTransporte4);
+        vehiculoTransportes.add(vehiculoTransporte1);
+        vehiculoTransportes.add(vehiculoTransporte2);
+        vehiculoTransportes.add(vehiculoTransporte3);
+        vehiculoTransportes.add(vehiculoTransporte4);
 
         // Crear propietarios
-        Propietario propietario1 = new Propietario("Juan Perez",50, "123456789", "juan@example.com", "3001234567", vehiculoCarga1);
-        Propietario propietario2 = new Propietario("Maria Gomez",35, "987654321", "maria@example.com", "3009876543", vehiculoCarga2);
-        Propietario propietario3 = new Propietario("Carlos Ruiz",22, "112233445", "carlos@example.com", "3001122334", vehiculoCarga3);
-        Propietario propietario4 = new Propietario("Ana Martinez",45, "556677889", "ana@example.com", "3005566778", vehiculoCarga4);
-
-        empresaTransporte.getPropietarios().add(propietario1);
-        empresaTransporte.getPropietarios().add(propietario2);
-        empresaTransporte.getPropietarios().add(propietario3);
-        empresaTransporte.getPropietarios().add(propietario4);
+        propietarios.add(Propietario.Builder().nombre("Juan Perez").edad(50).cedula("123456789").email("juan@example.com").celular("3001234567").vehiculo(vehiculoCarga1).build());
+        propietarios.add(Propietario.Builder().nombre("Maria Gomez").edad(35).cedula("987654321").email("maria@example.com").celular("3009876543").vehiculo(vehiculoCarga2).build());
+        propietarios.add(Propietario.Builder().nombre("Carlos Ruiz").edad(22).cedula("112233445").email("carlos@example.com").celular("3001122334").vehiculo(vehiculoCarga3).build());
+        propietarios.add(Propietario.Builder().nombre("Ana Martinez").edad(45).cedula("556677889").email("ana@example.com").celular("3005566778").vehiculo(vehiculoCarga4).build());
 
         // Crear usuarios
-        Usuario usuario1 = new Usuario("Pedro Lopez", "25",65, vehiculoTransporte1);
-        Usuario usuario2 = new Usuario("Luisa Fernandez", "30",70, vehiculoTransporte2);
-        Usuario usuario3 = new Usuario("Jose Ramirez", "40",68, vehiculoTransporte3);
-        Usuario usuario4 = new Usuario("Sandra Ortiz", "35",70, vehiculoTransporte4);
-
-        empresaTransporte.getUsuarios().add(usuario1);
-        empresaTransporte.getUsuarios().add(usuario2);
-        empresaTransporte.getUsuarios().add(usuario3);
-        empresaTransporte.getUsuarios().add(usuario4);
-
-        return empresaTransporte;
+        usuarios.add(Usuario.Builder().nombre("Carl").edad("21").peso(70).build());
+        usuarios.add(Usuario.Builder().nombre("Camilo").edad("20").peso(75).build());
+        usuarios.add(Usuario.Builder().nombre("Cesar").edad("27").peso(80).build());
+        usuarios.add(Usuario.Builder().nombre("Daniel").edad("18").peso(75).build());
     }
 
-    private static void mostrarDatosDePrueba() {
-        EmpresaTransporte empresaTransporte = crearDatosDePrueba();
-        System.out.println("Has seleccionado la opción 4 (Mostrar datos de prueba para la clase Empresa de Transporte)");
+    private static void mostrarDatosDePrueba(LinkedList<VehiculoTransporte> vehiculoTransportes,LinkedList<VehiculoCarga> vehiculoCargas,LinkedList<Propietario> propietarios,LinkedList<Usuario> usuarios) {
+        System.out.println("Has seleccionado la opción 1 (Mostrar datos de prueba para la clase Empresa de Transporte)");
 
         // Prueba: Mostrar datos de prueba creados
         System.out.println("Propietarios:");
-        empresaTransporte.getPropietarios().forEach(propietario -> System.out.println(propietario.toString()));
+        propietarios.forEach(propietario -> System.out.println(propietario.toString()));
 
         System.out.println("\nUsuarios:");
-        empresaTransporte.getUsuarios().forEach(usuario -> System.out.println(usuario.toString()));
+        usuarios.forEach(usuario -> System.out.println(usuario.toString()));
 
         System.out.println("\nVehículos de Carga:");
-        empresaTransporte.getVehiculosCarga().forEach(vehiculo -> System.out.println(vehiculo.toString()));
+        vehiculoCargas.forEach(vehiculo -> System.out.println(vehiculo.toString()));
 
         System.out.println("\nVehículos de Transporte:");
-        empresaTransporte.getVehiculosTransporte().forEach(vehiculo -> System.out.println(vehiculo.toString()));
+        vehiculoTransportes.forEach(vehiculo -> System.out.println(vehiculo.toString()));
     }
 }
