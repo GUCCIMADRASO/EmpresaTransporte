@@ -27,7 +27,7 @@ public class MainTransporte {
                         mostrarDatosDePrueba(vehiculoTransportes,vehiculoCargas,propietarios,usuarios);
                         break;
                     case 2:
-                        crearVehiculosTransporte(vehiculoTransportes,usuarios);
+                        crearVehiculosTransporte(vehiculoTransportes);
                         break;
                     case 3:
                         calcularPasajerosTransportados(vehiculoTransportes,usuarios);
@@ -97,7 +97,7 @@ public class MainTransporte {
         System.out.println("Y se creó con éxito el vehículo de carga con los datos: " + vehiculoCarga + vehiculoCarga.toString1());
     }
 
-    private static void crearVehiculosTransporte(LinkedList<VehiculoTransporte> vehiculoTransportes,LinkedList<Usuario> usuarios) {
+    private static void crearVehiculosTransporte(LinkedList<VehiculoTransporte> vehiculoTransportes) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Has seleccionado la opción 2 (Crear vehículos de transporte)");
         int numeroVehiculosTransportes = Integer.parseInt(obtenerDato(scanner,"Ingrese el numero de vehículos de transporte que desea crear: "));
