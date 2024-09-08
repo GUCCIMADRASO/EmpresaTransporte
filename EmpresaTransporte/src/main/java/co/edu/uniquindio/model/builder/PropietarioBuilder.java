@@ -1,4 +1,7 @@
-package co.edu.uniquindio;
+package co.edu.uniquindio.model.builder;
+
+import co.edu.uniquindio.model.Propietario;
+import co.edu.uniquindio.model.Vehiculo;
 
 import java.util.LinkedList;
 

@@ -1,17 +1,23 @@
-package co.edu.uniquindio;
+package co.edu.uniquindio.model;
+
+import co.edu.uniquindio.model.builder.UsuarioBuilder;
 
 public class Usuario {
     private String nombre;
-    private String edad;
-    private Vehiculo vehiculo;
+    private int edad;
     private double peso;
+    private int id;
+    private Vehiculo vehiculo;
 
-    public Usuario(String nombre, String edad, double peso, Vehiculo vehiculo) {
+    public Usuario(String nombre, int edad, double peso,int id, Vehiculo vehiculo) {
         this.nombre = nombre;
         this.edad = edad;
         this.peso = peso;
+        this.id = id;
         this.vehiculo = vehiculo;
     }
+    public Usuario() {}
+
 
     public static UsuarioBuilder Builder(){
         return new UsuarioBuilder();
@@ -25,11 +31,11 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getEdad() {
+    public int getEdad() {
         return edad;
     }
 
-    public void setEdad(String edad) {
+    public void setEdad(int edad) {
         this.edad = edad;
     }
 
@@ -40,6 +46,10 @@ public class Usuario {
     public void setPeso(double peso) {
         this.peso = peso;
     }
+
+    public int getId() {return id;}
+
+    public void setId(int id) {this.id = id;}
 
     public Vehiculo getVehiculo() { return vehiculo; }
 

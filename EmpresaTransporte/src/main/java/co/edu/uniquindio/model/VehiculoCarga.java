@@ -1,4 +1,6 @@
-package co.edu.uniquindio;
+package co.edu.uniquindio.model;
+
+import co.edu.uniquindio.model.builder.VehiculoCargaBuilder;
 
 public class VehiculoCarga extends Vehiculo {
 
@@ -12,6 +14,8 @@ public class VehiculoCarga extends Vehiculo {
     }
 
     public VehiculoCarga() {}
+
+    public static VehiculoCargaBuilder Builder(){return new VehiculoCargaBuilder();}
 
     public double getCapacidadCarga() {
         return capacidadCarga;

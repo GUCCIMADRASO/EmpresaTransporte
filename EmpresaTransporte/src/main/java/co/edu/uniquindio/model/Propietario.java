@@ -1,7 +1,8 @@
-package co.edu.uniquindio;
+package co.edu.uniquindio.model;
+
+import co.edu.uniquindio.model.builder.PropietarioBuilder;
 
 import java.util.Collection;
-import java.util.LinkedList;
 
 public class Propietario {
 
@@ -62,6 +63,8 @@ public class Propietario {
     public Vehiculo getVehiculo() {
         return vehiculo;
     }
+
+    public void setVehiculo(Vehiculo vehiculo) { this.vehiculo = vehiculo; }
 
     public int getEdad() {
         return edad;

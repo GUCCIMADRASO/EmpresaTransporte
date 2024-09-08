@@ -1,4 +1,6 @@
-package co.edu.uniquindio;
+package co.edu.uniquindio.model;
+
+import co.edu.uniquindio.model.builder.VehiculoBuilder;
 
 public abstract class Vehiculo {
     private String placa;
