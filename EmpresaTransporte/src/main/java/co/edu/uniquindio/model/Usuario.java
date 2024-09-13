@@ -7,21 +7,25 @@ public class Usuario {
     private int edad;
     private double peso;
     private int id;
-    private Vehiculo vehiculo;
+    private VehiculoTransporte vehiculoTransporte;
 
-    public Usuario(String nombre, int edad, double peso,int id, Vehiculo vehiculo) {
+    //Constructos de usuario
+
+    public Usuario(String nombre, int edad, double peso,int id, VehiculoTransporte vehiculoTransporte) {
         this.nombre = nombre;
         this.edad = edad;
         this.peso = peso;
         this.id = id;
-        this.vehiculo = vehiculo;
+        this.vehiculoTransporte = vehiculoTransporte;
     }
-    public Usuario() {}
 
+    //Metodo para crear un usuario con el builder
 
-    public static UsuarioBuilder Builder(){
+    public static UsuarioBuilder builder(){
         return new UsuarioBuilder();
     }
+
+    //Getters y Setters
 
     public String getNombre() {
         return nombre;
@@ -51,7 +55,9 @@ public class Usuario {
 
     public void setId(int id) {this.id = id;}
 
-    public Vehiculo getVehiculo() { return vehiculo; }
+    public Vehiculo getVehiculoTransporte() { return vehiculoTransporte; }
+
+    //Metodo toString
 
     @Override
     public String toString() {
@@ -59,7 +65,7 @@ public class Usuario {
                 "nombre='" + nombre + '\'' +
                 ", edad='" + edad + '\'' +
                 ", peso='" + peso + '\'' +
-                ", vehiculo=" + vehiculo +
+                ", vehiculo=" + vehiculoTransporte +
                 '}';
     }
 }

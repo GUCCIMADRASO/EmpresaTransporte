@@ -8,17 +8,21 @@ public class VehiculoTransporte extends Vehiculo {
 
     private int maxPasajeros;
     private Usuario usuario;
-    private LinkedList<Usuario> listUsuarios;
+    private LinkedList<Usuario> listUsuario;
+
+    //Constructos de vehiculo transporte con los atributos de vehiculo
 
     public VehiculoTransporte(String placa, String modelo, String marca, String color,int maxPasajeros) {
         super(placa, modelo, marca, color);
         this.maxPasajeros = maxPasajeros;
-        listUsuarios = new LinkedList<>();
+        listUsuario = new LinkedList<>();
     }
 
-    public VehiculoTransporte() {}
+    //Metodo para crear un vehiculo de transporte con el builder
 
-    public static VehiculoTransporteBuilder Builder(){return new VehiculoTransporteBuilder();}
+    public static VehiculoTransporteBuilder builder(){return new VehiculoTransporteBuilder();}
+
+    //Getters y Setters
 
     public int getMaxPasajeros() {
         return maxPasajeros;
@@ -32,15 +36,7 @@ public class VehiculoTransporte extends Vehiculo {
 
     public void setUsuario(Usuario usuario) {this.usuario = usuario;}
 
-    public void setListUsuarios(LinkedList<Usuario> usuarios) {this.listUsuarios = usuarios;}
+    public void setListUsuario(LinkedList<Usuario> usuarios) {this.listUsuario = usuarios;}
 
-    public LinkedList<Usuario> getListUsuarios() {return listUsuarios;}
-
-    public String datosUsuarios(){
-        String mensaje = "";
-        for (Usuario usuario: listUsuarios){
-            mensaje += " nombre = " + usuario.getNombre() + " edad = " + usuario.getEdad() + " peso " + usuario.getPeso() + " ";
-        }
-        return mensaje;
-    }
+    public LinkedList<Usuario> getListUsuario() {return listUsuario;}
 }

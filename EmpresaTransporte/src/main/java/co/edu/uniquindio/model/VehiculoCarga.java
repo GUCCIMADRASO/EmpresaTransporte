@@ -7,15 +7,19 @@ public class VehiculoCarga extends Vehiculo {
     private double capacidadCarga;
     private int numeroEjes;
 
+    //Constructos de vehiculo carga con los atributos de vehiculo
+
     public VehiculoCarga(String placa, String modelo, String marca, String color, double capacidad, int numeroEjes) {
         super(placa, modelo, marca, color);
         this.capacidadCarga = capacidad;
         this.numeroEjes = numeroEjes;
     }
 
-    public VehiculoCarga() {}
+    //Metodo para crear un vehiculo de carga con el builder
 
-    public static VehiculoCargaBuilder Builder(){return new VehiculoCargaBuilder();}
+    public static VehiculoCargaBuilder builder(){return new VehiculoCargaBuilder();}
+
+    //Getters y Setters
 
     public double getCapacidadCarga() {
         return capacidadCarga;
@@ -31,12 +35,5 @@ public class VehiculoCarga extends Vehiculo {
 
     public void setNumeroEjes(int numeroEjes) {
         this.numeroEjes = numeroEjes;
-    }
-
-    public String toString1() {
-        return " " +
-                "capacidadCarga=" + capacidadCarga +
-                ", numeroEjes=" + numeroEjes +
-                '}';
     }
 }

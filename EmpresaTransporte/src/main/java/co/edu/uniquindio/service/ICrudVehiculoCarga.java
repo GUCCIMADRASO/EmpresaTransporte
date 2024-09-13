@@ -9,5 +9,5 @@ public interface ICrudVehiculoCarga {
     boolean eliminarVehiculoCarga(String placa);
     boolean modificarVehiculoCarga(String placa,VehiculoCargaBuilder vehiculoCarga);
     VehiculoCarga getVehiculoCargaCrud(String placa);
-    LinkedList<VehiculoCarga> getListVehiculosCargaCrud();
+    LinkedList<VehiculoCarga> getListVehiculoCargaCrud();
 }

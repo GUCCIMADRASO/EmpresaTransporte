@@ -32,6 +32,6 @@ public abstract class VehiculoBuilder<T extends VehiculoBuilder<T>> {
     // Metodo abstracto para construir el vehiculo
     public abstract Vehiculo build();
 
-    // Metodo para obtener la instancia actual del Builder
+    // Metodo para obtener la instancia actual del builder
     protected abstract T self();
 }

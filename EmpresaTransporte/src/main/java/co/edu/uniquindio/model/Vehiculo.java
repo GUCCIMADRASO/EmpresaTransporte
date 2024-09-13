@@ -1,12 +1,12 @@
 package co.edu.uniquindio.model;
 
-import co.edu.uniquindio.model.builder.VehiculoBuilder;
-
 public abstract class Vehiculo {
     private String placa;
     private String modelo;
     private String marca;
     private String color;
+
+    //Constructos de vehiculo
 
     public Vehiculo(String placa, String modelo, String marca, String color) {
         this.placa = placa;
@@ -15,7 +15,7 @@ public abstract class Vehiculo {
         this.color = color;
     }
 
-    public Vehiculo() {}
+    //Getters y Setters
 
     public String getPlaca() {
         return placa;
@@ -49,7 +49,7 @@ public abstract class Vehiculo {
         this.color = color;
     }
 
-
+    //Metodo toString
 
     @Override
     public String toString() {

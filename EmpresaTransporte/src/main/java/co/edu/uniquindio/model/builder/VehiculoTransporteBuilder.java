@@ -1,6 +1,5 @@
 package co.edu.uniquindio.model.builder;
 
-import co.edu.uniquindio.model.Usuario;
 import co.edu.uniquindio.model.VehiculoTransporte;
 
 public class VehiculoTransporteBuilder extends VehiculoBuilder<VehiculoTransporteBuilder>{

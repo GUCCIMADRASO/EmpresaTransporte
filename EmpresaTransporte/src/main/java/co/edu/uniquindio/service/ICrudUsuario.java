@@ -10,5 +10,5 @@ public interface ICrudUsuario {
     boolean eliminarUsuario(int id);
     boolean modificarUsuario(int id,UsuarioBuilder usuario);
     Usuario getUsuarioCrud(int id);
-    LinkedList<Usuario> getListUsuariosCrud();
+    LinkedList<Usuario> getListUsuarioCrud();
 }

@@ -9,32 +9,34 @@ public class EmpresaTransporte implements
         ICrudUsuario,
         ICrudPropietario,
         ICrudVehiculoCarga,
-        ICrudVehiculoTransporte {
+        ICrudVehiculoTransporte,
+        IServicesUsuario{
 
     private String nombre;
-    private LinkedList<Propietario> listPropietarios = new LinkedList<>();
-    private LinkedList<Usuario> listUsuarios = new LinkedList<>();
-    private LinkedList<Vehiculo> listVehiculos = new LinkedList<>();
-    private LinkedList<VehiculoTransporte> listVehiculosTransporte = new LinkedList<>();
-    private LinkedList<VehiculoCarga> listVehiculosCarga = new LinkedList<>();
+    private final LinkedList<Propietario> listPropietario = new LinkedList<>();
+    private final LinkedList<Usuario> listUsuario = new LinkedList<>();
+    private final LinkedList<VehiculoTransporte> listVehiculoTransporte = new LinkedList<>();
+    private final LinkedList<VehiculoCarga> listVehiculoCarga = new LinkedList<>();
 
+    //Metodo para calcular pasajeros transportados
 
     public int calcularPasajerosTransportados(String placa) {
         saturar();
         int contador = 0;
-        for (VehiculoTransporte vehiculoTransporte : listVehiculosTransporte) {
+        for (VehiculoTransporte vehiculoTransporte : listVehiculoTransporte) {
             if (vehiculoTransporte.getPlaca().equalsIgnoreCase(placa)) {
-                contador = vehiculoTransporte.getListUsuarios().size();
+                contador = vehiculoTransporte.getListUsuario().size();
             }
         }
         return contador;
     }
 
-    public int usuariosConSobrepeso() {
+    //Metodo para contar usuarios con sobrepeso
+
+    public int contarUsuariosConSobrepeso(double peso) {
         int contador = 0;
-        double peso = 80;
-        for (VehiculoTransporte vehiculoTransporte : listVehiculosTransporte) {
-            for (Usuario usuario : vehiculoTransporte.getListUsuarios()) {
+        for (VehiculoTransporte vehiculoTransporte : listVehiculoTransporte) {
+            for (Usuario usuario : vehiculoTransporte.getListUsuario()) {
                 if (usuario.getPeso() >= peso) {
                     contador++;
                 }
@@ -43,12 +45,12 @@ public class EmpresaTransporte implements
         return contador;
     }
 
-    public int contarUsuariosEnRangoDeEdad() {
+    //Metodo para contar usuarios en rango de edad
+
+    public int contarUsuariosEnRangoDeEdad(int edadMinima,int edadMaxima) {
         int contador = 0;
-        int edadMinima = 40;
-        int edadMaxima = 60;
-        for (VehiculoTransporte vehiculoTransporte : listVehiculosTransporte){
-            for (Usuario usuario : vehiculoTransporte.getListUsuarios()) {
+        for (VehiculoTransporte vehiculoTransporte : listVehiculoTransporte){
+            for (Usuario usuario : vehiculoTransporte.getListUsuario()) {
                 int edad = usuario.getEdad();
                 if (edad >= edadMinima && edad <= edadMaxima) {
                     contador++;
@@ -58,39 +60,42 @@ public class EmpresaTransporte implements
         return contador;
     }
 
-    public int contarPropietariosMayoresDe40() {
+    //Metodo para contar propietarios mayores de 40 años
+
+    public int contarPropietariosMayoresDe40(int edad) {
         int contador = 0;
-        for (Propietario propietario : listPropietarios) {
-            if (propietario.getEdad() > 40) {
+        for (Propietario propietario : listPropietario) {
+            if (propietario.getEdad() > edad) {
                 contador++;
             }
         }
         return contador;
     }
 
+    //Metodo para saturar los vehiculos de transporte
 
     private void saturar() {
         // Índice
         int i = 0;
 
-        for (VehiculoTransporte vehiculoTransporte : listVehiculosTransporte) {
+        for (VehiculoTransporte vehiculoTransporte : listVehiculoTransporte) {
             int maxPasajeros = vehiculoTransporte.getMaxPasajeros();
-            LinkedList<Usuario> usuariosTransportados = vehiculoTransporte.getListUsuarios();
+            LinkedList<Usuario> usuariosTransportados = vehiculoTransporte.getListUsuario();
 
             // Si la lista de usuarios no está inicializada, la inicializamos
             if (usuariosTransportados == null) {
                 usuariosTransportados = new LinkedList<>();
-                vehiculoTransporte.setListUsuarios(usuariosTransportados);
+                vehiculoTransporte.setListUsuario(usuariosTransportados);
             }
 
             // Añadimos usuarios hasta llenar el vehículo, sin exceder el maxPasajeros
-            while (usuariosTransportados.size() < maxPasajeros && i < listUsuarios.size()) {
-                usuariosTransportados.add(listUsuarios.get(i));
+            while (usuariosTransportados.size() < maxPasajeros && i < listUsuario.size()) {
+                usuariosTransportados.add(listUsuario.get(i));
                 i++;
             }
 
-            // Si ya no hay más usuarios en listUsuarios, salimos del bucle
-            if (i >= listUsuarios.size()) {
+            // Si ya no hay más usuarios en listUsuario, salimos del bucle
+            if (i >= listUsuario.size()) {
                 break;
             }
         }
@@ -100,10 +105,12 @@ public class EmpresaTransporte implements
     //          Verificaciones para evitar objetos duplicados
     //******************************************************************
 
+    //Metodo para buscar un usuario por id
+
     private Usuario buscarUsuario(int id) {
         Usuario usuarioExistente = null;
 
-        for (Usuario usuario : listUsuarios) {
+        for (Usuario usuario : listUsuario) {
             if (usuario.getId() == id) {
                 usuarioExistente = usuario;
                 break;
@@ -111,10 +118,13 @@ public class EmpresaTransporte implements
         }
         return usuarioExistente;
     }
+
+    //Metodo para buscar un propietario por cedula
+
     private Propietario buscarPropietario(String cedula) {
         Propietario propietarioExistente = null;
 
-        for (Propietario propietario : listPropietarios) {
+        for (Propietario propietario : listPropietario) {
             if (propietario.getCedula().equals(cedula)) {
                 propietarioExistente = propietario;
                 break;
@@ -122,21 +132,13 @@ public class EmpresaTransporte implements
         }
         return propietarioExistente;
     }
-    private Vehiculo buscarVehiculo(String placa) {
-        Vehiculo vehiculoExistente = null;
 
-        for (Vehiculo vehiculo : listVehiculos) {
-            if (vehiculo.getPlaca().equals(placa)) {
-                vehiculoExistente = vehiculo;
-                break;
-            }
-        }
-        return vehiculoExistente;
-    }
+    //Metodo para buscar un vehiculo de carga por placa
+
     private VehiculoCarga buscarVehiculoCarga(String placa) {
         VehiculoCarga vehiculoExistente = null;
 
-        for (VehiculoCarga vehiculo : listVehiculosCarga) {
+        for (VehiculoCarga vehiculo : listVehiculoCarga) {
             if (vehiculo.getPlaca().equals(placa)) {
                 vehiculoExistente = vehiculo;
                 break;
@@ -144,10 +146,13 @@ public class EmpresaTransporte implements
         }
         return vehiculoExistente;
     }
+
+    //Metodo para buscar un vehiculo de transporte por placa
+
     private VehiculoTransporte buscarVehiculoTransporte(String placa) {
         VehiculoTransporte vehiculoExistente = null;
 
-        for (VehiculoTransporte vehiculo : listVehiculosTransporte) {
+        for (VehiculoTransporte vehiculo : listVehiculoTransporte) {
             if (vehiculo.getPlaca().equals(placa)) {
                 vehiculoExistente = vehiculo;
                 break;
@@ -155,9 +160,12 @@ public class EmpresaTransporte implements
         }
         return vehiculoExistente;
     }
+
     //******************************************************************
     //                Implementacion de ICrudUsuario
     //******************************************************************
+
+    //Metodo para crear un usuario
 
     @Override
     public boolean crearUsuario(int id, UsuarioBuilder usuario) {
@@ -165,22 +173,26 @@ public class EmpresaTransporte implements
 
         if(usuarioExistente == null){
             Usuario newUsuario = usuario.build();
-            listUsuarios.add(newUsuario);
+            listUsuario.add(newUsuario);
             return true; // Usuario creado correctamente
         }
         return false; // Usuario duplicado
     }
+
+    //Metodo para eliminar un usuario
 
     @Override
     public boolean eliminarUsuario(int id) {
         Usuario usuario = getUsuarioCrud(id);
 
         if (usuario != null) {
-            listUsuarios.remove(usuario);
+            listUsuario.remove(usuario);
             return true;  // Usuario eliminado correctamente
         }
         return false;  // No se encontró el usuario
     }
+
+    //Metodo para modificar un usuario
 
     @Override
     public boolean modificarUsuario(int id, UsuarioBuilder usuario) {
@@ -190,29 +202,38 @@ public class EmpresaTransporte implements
             // Modificar el usuario
             Usuario usuarioMod = usuario.build();
             // Buscar el índice del usuario existente en la lista
-            int index = listUsuarios.indexOf(usuarioExistente);
+            int index = listUsuario.indexOf(usuarioExistente);
             // Actualizar el usuario en la lista con el usuario modificado
-            listUsuarios.set(index, usuarioMod);
+            listUsuario.set(index, usuarioMod);
             return true;  // Usuario modificado correctamente
         }
         return false;  // El usuario no existe
     }
 
+    //Metodo para obtener un usuario
+
     @Override
     public Usuario getUsuarioCrud(int id) {
-        for (Usuario usuario : listUsuarios) {
+        for (Usuario usuario : listUsuario) {
             if (usuario.getId() == id) {
                 return usuario;  // Usuario encontrado
             }
         }
         return null;  // No se encontró el usuario
     }
+
+    //Metodo para obtener una lista de usuarios
+
     @Override
-    public LinkedList<Usuario> getListUsuariosCrud(){return listUsuarios;}
+    public LinkedList<Usuario> getListUsuarioCrud(){
+        return listUsuario;
+    }
 
     //******************************************************************
     //               Implementacion de ICrudPropietario
     //******************************************************************
+
+    //Metodo para crear un propietario
 
     @Override
     public boolean crearPropietario(String cedula, PropietarioBuilder propietarioBuilder) {
@@ -220,22 +241,26 @@ public class EmpresaTransporte implements
 
         if (propietarioExistente == null) {
             Propietario newPropietario = propietarioBuilder.build();
-            listPropietarios.add(newPropietario);
+            listPropietario.add(newPropietario);
             return true; // Propietario creado correctamente
         }
         return false; // Propietario duplicado
     }
+
+    //Metodo para eliminar un propietario
 
     @Override
     public boolean eliminarPropietario(String cedula) {
         Propietario propietario = getPropietarioCrud(cedula);
 
         if (propietario != null) {
-            listPropietarios.remove(propietario);
+            listPropietario.remove(propietario);
             return true;  // Propietario eliminado correctamente
         }
         return false;  // No se encontró el propietario
     }
+
+    //Metodo para modificar un propietario
 
     @Override
     public boolean modificarPropietario(String cedula, PropietarioBuilder propietarioBuilder) {
@@ -245,17 +270,19 @@ public class EmpresaTransporte implements
             // Modificar el propietario
             Propietario propietarioMod = propietarioBuilder.build();
             // Buscar el índice del propietario existente en la lista
-            int index = listPropietarios.indexOf(propietarioExistente);
+            int index = listPropietario.indexOf(propietarioExistente);
             // Actualizar el propietario en la lista con el propietario modificado
-            listPropietarios.set(index, propietarioMod);
+            listPropietario.set(index, propietarioMod);
             return true;  // Propietario modificado correctamente
         }
         return false;  // El propietario no existe
     }
 
+    //Metodo para obtener un propietario
+
     @Override
     public Propietario getPropietarioCrud(String cedula) {
-        for (Propietario propietario : listPropietarios) {
+        for (Propietario propietario : listPropietario) {
             if (propietario.getCedula().equals(cedula)) {
                 return propietario;  // Propietario encontrado
             }
@@ -263,36 +290,45 @@ public class EmpresaTransporte implements
         return null;  // No se encontró el propietario
     }
 
+    //Metodo para obtener una lista de propietarios
+
     @Override
     public LinkedList<Propietario> getListPropietarioCrud() {
-        return listPropietarios;
+        return listPropietario;
     }
 
     //******************************************************************
     //               Implementacion de ICrudVehiculoCarga
     //******************************************************************
+
+    //Metodo para crear un vehiculo de carga
+
     @Override
     public boolean crearVehiculoCarga(String placa, VehiculoCargaBuilder vehiculoCargaBuilder) {
         VehiculoCarga vehiculoExistente = buscarVehiculoCarga(placa);
 
         if (vehiculoExistente == null) {
             VehiculoCarga newVehiculoCarga = vehiculoCargaBuilder.build();
-            listVehiculosCarga.add(newVehiculoCarga);
+            listVehiculoCarga.add(newVehiculoCarga);
             return true; // Vehículo de carga creado correctamente
         }
         return false; // Vehículo de carga duplicado
     }
+
+    //Metodo para eliminar un vehiculo de carga
 
     @Override
     public boolean eliminarVehiculoCarga(String placa) {
         VehiculoCarga vehiculoCarga = getVehiculoCargaCrud(placa);
 
         if (vehiculoCarga != null) {
-            listVehiculosCarga.remove(vehiculoCarga);
+            listVehiculoCarga.remove(vehiculoCarga);
             return true;  // Vehículo de carga eliminado correctamente
         }
         return false;  // No se encontró el vehículo de carga
     }
+
+    //Metodo para modificar un vehiculo de carga
 
     @Override
     public boolean modificarVehiculoCarga(String placa, VehiculoCargaBuilder vehiculoCargaBuilder) {
@@ -302,17 +338,19 @@ public class EmpresaTransporte implements
             // Modificar el vehículo de carga
             VehiculoCarga vehiculoMod = vehiculoCargaBuilder.build();
             // Buscar el índice del vehículo existente en la lista
-            int index = listVehiculosCarga.indexOf(vehiculoExistente);
+            int index = listVehiculoCarga.indexOf(vehiculoExistente);
             // Actualizar el vehículo en la lista con el vehículo modificado
-            listVehiculosCarga.set(index, vehiculoMod);
+            listVehiculoCarga.set(index, vehiculoMod);
             return true;  // Vehículo de carga modificado correctamente
         }
         return false;  // El vehículo de carga no existe
     }
 
+    //Metodo para obtener un vehiculo de carga
+
     @Override
     public VehiculoCarga getVehiculoCargaCrud(String placa) {
-        for (VehiculoCarga vehiculo : listVehiculosCarga) {
+        for (VehiculoCarga vehiculo : listVehiculoCarga) {
             if (vehiculo.getPlaca().equals(placa)) {
                 return vehiculo;  // Vehículo de carga encontrado
             }
@@ -320,35 +358,45 @@ public class EmpresaTransporte implements
         return null;  // No se encontró el vehículo de carga
     }
 
+    //Metodo para obtener una lista de vehiculo de carga
+
     @Override
-    public LinkedList<VehiculoCarga> getListVehiculosCargaCrud() {
-        return listVehiculosCarga;
+    public LinkedList<VehiculoCarga> getListVehiculoCargaCrud() {
+        return listVehiculoCarga;
     }
+
     //******************************************************************
     //             Implementacion de ICrudVehiculoTransporte
     //******************************************************************
+
+    //Metodo para crear un vehiculo de transporte
+
     @Override
     public boolean crearVehiculoTransporte(String placa, VehiculoTransporteBuilder vehiculoTransporte) {
         VehiculoTransporte vehiculoExistente = buscarVehiculoTransporte(placa);
 
         if (vehiculoExistente == null) {
             VehiculoTransporte newVehiculo = vehiculoTransporte.build();
-            listVehiculosTransporte.add(newVehiculo);
+            listVehiculoTransporte.add(newVehiculo);
             return true; // Vehículo de transporte creado correctamente
         }
         return false; // Vehículo de transporte duplicado
     }
+
+    //Metodo para eliminar un vehiculo de transporte
 
     @Override
     public boolean eliminarVehiculoTransporte(String placa) {
         VehiculoTransporte vehiculo = getVehiculoTransporteCrud(placa);
 
         if (vehiculo != null) {
-            listVehiculosTransporte.remove(vehiculo);
+            listVehiculoTransporte.remove(vehiculo);
             return true;  // Vehículo de transporte eliminado correctamente
         }
         return false;  // No se encontró el vehículo de transporte
     }
+
+    //Metodo para modificar un vehiculo de transporte
 
     @Override
     public boolean modificarVehiculoTransporte(String placa, VehiculoTransporteBuilder vehiculoTransporteBuilder) {
@@ -358,17 +406,19 @@ public class EmpresaTransporte implements
             // Modificar el vehículo de transporte
             VehiculoTransporte vehiculoMod = vehiculoTransporteBuilder.build();
             // Buscar el índice del vehículo existente en la lista
-            int index = listVehiculosTransporte.indexOf(vehiculoExistente);
+            int index = listVehiculoTransporte.indexOf(vehiculoExistente);
             // Actualizar el vehículo en la lista con el vehículo modificado
-            listVehiculosTransporte.set(index, vehiculoMod);
+            listVehiculoTransporte.set(index, vehiculoMod);
             return true;  // Vehículo de transporte modificado correctamente
         }
         return false;  // El vehículo de transporte no existe
     }
 
+    //Metodo para obtener un vehiculo de transporte
+
     @Override
     public VehiculoTransporte getVehiculoTransporteCrud(String placa) {
-        for (VehiculoTransporte vehiculo : listVehiculosTransporte) {
+        for (VehiculoTransporte vehiculo : listVehiculoTransporte) {
             if (vehiculo.getPlaca().equals(placa)) {
                 return vehiculo;  // Vehículo de transporte encontrado
             }
@@ -376,23 +426,24 @@ public class EmpresaTransporte implements
         return null;  // No se encontró el vehículo de transporte
     }
 
+    //Metodo para obtener una lista de vehiculo de transporte
+
     @Override
-    public LinkedList<VehiculoTransporte> getListVehiculosTransporteCrud() {
-        return listVehiculosTransporte;
+    public LinkedList<VehiculoTransporte> getListVehiculoTransporteCrud() {
+        return listVehiculoTransporte;
     }
+
     //******************************************************************
     //                         Getters y Setters
     //******************************************************************
 
-    public LinkedList<Propietario> getListPropietarios() {return listPropietarios;}
+    public LinkedList<Propietario> getListPropietario() {return listPropietario;}
 
-    public LinkedList<Usuario> getListUsuarios() { return listUsuarios;}
+    public LinkedList<Usuario> getListUsuario() { return listUsuario;}
 
-    public LinkedList<Vehiculo> getListVehiculos() {return listVehiculos;}
+    public LinkedList<VehiculoTransporte> getListVehiculoTransporte() {return listVehiculoTransporte;}
 
-    public LinkedList<VehiculoTransporte> getListVehiculosTransporte() {return listVehiculosTransporte;}
-
-    public LinkedList<VehiculoCarga> getListVehiculosCarga() {return listVehiculosCarga;}
+    public LinkedList<VehiculoCarga> getListVehiculoCarga() {return listVehiculoCarga;}
 
     public String getNombre() {return nombre;}
 

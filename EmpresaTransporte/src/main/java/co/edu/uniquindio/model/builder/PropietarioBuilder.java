@@ -1,7 +1,7 @@
 package co.edu.uniquindio.model.builder;
 
 import co.edu.uniquindio.model.Propietario;
-import co.edu.uniquindio.model.Vehiculo;
+import co.edu.uniquindio.model.VehiculoCarga;
 
 import java.util.LinkedList;
 
@@ -11,8 +11,8 @@ public class PropietarioBuilder {
     protected String cedula;
     protected String email;
     protected String celular;
-    protected Vehiculo vehiculo;
-    protected LinkedList<Vehiculo> vehiculos;
+    protected VehiculoCarga vehiculoCarga;
+    protected LinkedList<VehiculoCarga> listVehiculoCarga;
 
     public PropietarioBuilder nombre(String nombre) {
         this.nombre = nombre;
@@ -39,18 +39,18 @@ public class PropietarioBuilder {
         return this;
     }
 
-    public PropietarioBuilder vehiculo(Vehiculo vehiculo) {
-        this.vehiculo = vehiculo;
+    public PropietarioBuilder vehiculoCarga(VehiculoCarga vehiculoaCarga) {
+        this.vehiculoCarga = vehiculoCarga;
         return this;
     }
 
-    public PropietarioBuilder vehiculos(LinkedList<Vehiculo> vehiculos) {
-        this.vehiculos = vehiculos;
+    public PropietarioBuilder listVehiculoCarga(LinkedList<VehiculoCarga> listVehiculoCarga) {
+        this.listVehiculoCarga = listVehiculoCarga;
         return this;
     }
 
     public Propietario build() {
-        return new Propietario(nombre, edad, cedula, email, celular, vehiculo, vehiculos);
+        return new Propietario(nombre, edad, cedula, email, celular, vehiculoCarga, listVehiculoCarga);
     }
 
 }

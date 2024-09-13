@@ -1,8 +1,7 @@
 package co.edu.uniquindio.model;
 
 import co.edu.uniquindio.model.builder.PropietarioBuilder;
-
-import java.util.Collection;
+import java.util.LinkedList;
 
 public class Propietario {
 
@@ -11,22 +10,28 @@ public class Propietario {
     private String cedula;
     private String email;
     private String celular;
-    private Vehiculo vehiculo;
-    private Collection<Vehiculo> vehiculos;
+    private VehiculoCarga vehiculoCarga;
+    private LinkedList<VehiculoCarga> listVehiculoCarga;
 
-    public Propietario(String nombre, int edad, String cedula, String email, String celular, Vehiculo vehiculo, Collection<Vehiculo> vehiculos) {
+    //Constructos de propietario
+
+    public Propietario(String nombre, int edad, String cedula, String email, String celular, VehiculoCarga vehiculoCarga, LinkedList<VehiculoCarga> listVehiculoCarga) {
         this.nombre = nombre;
         this.edad = edad;
         this.cedula = cedula;
         this.email = email;
         this.celular = celular;
-        this.vehiculo = vehiculo;
-        this.vehiculos = vehiculos;
+        this.vehiculoCarga = vehiculoCarga;
+        this.listVehiculoCarga = listVehiculoCarga;
     }
 
-    public static PropietarioBuilder Builder(){
+    //Metodo para crear un propietario con el builder
+
+    public static PropietarioBuilder builder(){
         return new PropietarioBuilder();
     }
+
+    //Getters y Setters
 
     public String getNombre() {
         return nombre;
@@ -60,11 +65,11 @@ public class Propietario {
         this.celular = celular;
     }
 
-    public Vehiculo getVehiculo() {
-        return vehiculo;
+    public Vehiculo getVehiculoCarga() {
+        return vehiculoCarga;
     }
 
-    public void setVehiculo(Vehiculo vehiculo) { this.vehiculo = vehiculo; }
+    public void setVehiculoCarga(VehiculoCarga vehiculoCarga) { this.vehiculoCarga = vehiculoCarga; }
 
     public int getEdad() {
         return edad;
@@ -74,9 +79,11 @@ public class Propietario {
         this.edad = edad;
     }
 
-    public Collection<Vehiculo> getVehiculos() {
-        return vehiculos;
+    public LinkedList<VehiculoCarga> getListVehiculoCarga() {
+        return listVehiculoCarga;
     }
+
+    //Metodo toString
 
     @Override
     public String toString() {
